@@ -20,7 +20,7 @@ public class Game {
     @Column(nullable = false)
     private Date releaseDate;
 
-    @OneToMany
+    @ManyToMany
     private List<Platform> platforms;
 
     @OneToOne
@@ -36,6 +36,15 @@ public class Game {
         this.platforms = platforms;
         this.developer = developer;
     }
+
+    public Game(String title, Genre genre, Date releaseDate, List<Platform> platforms, Developer developer) {
+        this.title = title;
+        this.genre = genre;
+        this.releaseDate = releaseDate;
+        this.platforms = platforms;
+        this.developer = developer;
+    }
+
 
     public long getId() {
         return id;

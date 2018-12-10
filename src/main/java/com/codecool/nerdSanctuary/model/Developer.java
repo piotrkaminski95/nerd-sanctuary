@@ -27,6 +27,11 @@ public class Developer {
         this.country = country;
     }
 
+    public Developer(String name, String country) {
+        this.name = name;
+        this.country = country;
+    }
+
     public long getId() {
         return id;
     }
