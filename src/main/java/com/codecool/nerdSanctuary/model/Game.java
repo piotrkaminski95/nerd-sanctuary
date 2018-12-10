@@ -18,7 +18,7 @@ public class Game {
     private Genre genre;
 
     @Column(nullable = false)
-    private Date releseDate;
+    private Date releaseDate;
 
     @OneToMany
     private List<Platform> platforms;
@@ -28,11 +28,11 @@ public class Game {
 
     public Game() {}
 
-    public Game(long id, String title, Genre genre, Date releseDate, List<Platform> platforms, Developer developer) {
+    public Game(long id, String title, Genre genre, Date releaseDate, List<Platform> platforms, Developer developer) {
         this.id = id;
         this.title = title;
         this.genre = genre;
-        this.releseDate = releseDate;
+        this.releaseDate = releaseDate;
         this.platforms = platforms;
         this.developer = developer;
     }
@@ -61,12 +61,12 @@ public class Game {
         this.genre = genre;
     }
 
-    public Date getReleseDate() {
-        return releseDate;
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleseDate(Date releseDate) {
-        this.releseDate = releseDate;
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public List<Platform> getPlatforms() {
@@ -91,7 +91,7 @@ public class Game {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", genre=" + genre +
-                ", releseDate=" + releseDate +
+                ", releaseDate=" + releaseDate +
                 ", platforms=" + platforms +
                 ", developer=" + developer +
                 '}';
