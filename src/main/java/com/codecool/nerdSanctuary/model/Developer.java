@@ -1,5 +1,7 @@
 package com.codecool.nerdSanctuary.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Developer {
     private String country;
 
     @OneToMany(mappedBy = "developer")
+    @JsonIgnore
     private List<Game> games;
 
     public Developer() {}
