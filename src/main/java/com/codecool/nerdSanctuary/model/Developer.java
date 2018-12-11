@@ -56,6 +56,14 @@ public class Developer {
         this.country = country;
     }
 
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
+
     @Override
     public String toString() {
         return "Developer{" +
