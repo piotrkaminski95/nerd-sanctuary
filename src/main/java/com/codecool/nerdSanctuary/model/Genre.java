@@ -10,5 +10,14 @@ public enum Genre {
     STRATEGY,
     RACING,
     ARCADE,
-    FIGHT
+    FIGHT;
+
+    public static Genre getGenre(String s) throws IllegalArgumentException, NullPointerException {
+        for (Genre g: Genre.values()) {
+            if (g.toString().equals(s.toUpperCase())) {
+                return g;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }
