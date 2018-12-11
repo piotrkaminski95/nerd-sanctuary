@@ -1,7 +1,9 @@
 package com.codecool.nerdSanctuary.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -18,7 +20,7 @@ public class Game {
     private Genre genre;
 
     @Column(nullable = false)
-    private Date releaseDate;
+    private Calendar releaseDate;
 
     @ManyToMany
     private List<Platform> platforms;
@@ -28,7 +30,7 @@ public class Game {
 
     public Game() {}
 
-    public Game(long id, String title, Genre genre, Date releaseDate, List<Platform> platforms, Developer developer) {
+    public Game(long id, String title, Genre genre, Calendar releaseDate, List<Platform> platforms, Developer developer) {
         this.id = id;
         this.title = title;
         this.genre = genre;
@@ -37,7 +39,7 @@ public class Game {
         this.developer = developer;
     }
 
-    public Game(String title, Genre genre, Date releaseDate, List<Platform> platforms, Developer developer) {
+    public Game(String title, Genre genre, Calendar releaseDate, List<Platform> platforms, Developer developer) {
         this.title = title;
         this.genre = genre;
         this.releaseDate = releaseDate;
@@ -70,11 +72,12 @@ public class Game {
         this.genre = genre;
     }
 
-    public Date getReleaseDate() {
+    @JsonFormat(pattern = "yyyy-M-dd")
+    public Calendar getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(Calendar releaseDate) {
         this.releaseDate = releaseDate;
     }
 
