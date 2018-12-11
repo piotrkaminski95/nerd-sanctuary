@@ -23,7 +23,7 @@ public class Game {
     @ManyToMany
     private List<Platform> platforms;
 
-    @OneToOne
+    @ManyToOne
     private Developer developer;
 
     public Game() {}
