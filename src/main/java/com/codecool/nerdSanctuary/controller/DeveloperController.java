@@ -4,10 +4,9 @@ import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -51,5 +50,11 @@ public class DeveloperController {
     public List<Game> getDeveloperGames(@PathVariable long id) {
        return getDeveloper(id).getGames();
 //        return service.getDeveloperGames(id);
+    }
+
+
+    @PostMapping("/developer")
+    public Developer postDeveloper(@Valid @RequestBody Developer developer) {
+        return repository.save(developer);
     }
 }
