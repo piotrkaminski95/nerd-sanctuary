@@ -5,6 +5,7 @@ import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -27,9 +28,20 @@ public class DeveloperController {
         this.service = service;
     }
      */
-
+    // i don't know but i have idea to send here some graphical content it will be nicer
+//    @GetMapping("/developer/all")
     @GetMapping("/developer")
     public List<Developer> getAllDevelopers() {
         return repository.findAll();
+    }
+
+
+    @GetMapping("/developer/{id}")
+    public Developer getDeveloper(@PathVariable long id) {
+        if (repository.exists(id)) {
+            return repository.findOne(id);
+        }
+        throw new IllegalArgumentException(String.format("ID = %s does not exist!"));
+//        return service.getDeveloper(id);
     }
 }
