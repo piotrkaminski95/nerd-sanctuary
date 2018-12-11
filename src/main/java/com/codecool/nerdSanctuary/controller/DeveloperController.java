@@ -1,6 +1,7 @@
 package com.codecool.nerdSanctuary.controller;
 
 import com.codecool.nerdSanctuary.model.Developer;
+import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,5 +44,12 @@ public class DeveloperController {
         }
         throw new IllegalArgumentException(String.format("ID = %s does not exist!"));
 //        return service.getDeveloper(id);
+    }
+
+
+    @GetMapping("/developer/{id}/games")
+    public List<Game> getDeveloperGames(@PathVariable long id) {
+       return getDeveloper(id).getGames();
+//        return service.getDeveloperGames(id);
     }
 }
