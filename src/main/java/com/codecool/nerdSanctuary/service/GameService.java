@@ -17,7 +17,6 @@ import java.util.List;
 public class GameService {
     @Autowired
     private GameRepository gameRepo;
-
     @Autowired
     private PlatformRepository platformRepo;
     @Autowired
