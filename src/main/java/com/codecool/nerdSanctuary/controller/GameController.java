@@ -60,27 +60,27 @@ public class GameController {
     }
 
     @PostMapping(value = "game/add")
-    public ResponseEntity<?> addGame(@Valid @RequestBody Game game) {
+    public ResponseEntity<Game> addGame(@Valid @RequestBody Game game) {
         if (gameRepo.existsByTitle(game.getTitle())) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         gameRepo.save(game);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(gameRepo.findByTitle(game.getTitle()), HttpStatus.OK);
     }
 
     @PostMapping(value = "game/{id}/add/platform")
-    public ResponseEntity<?> addPlatform(@Valid @RequestBody Platform platform, @PathVariable("id") long id) {
+    public ResponseEntity<List<Platform>> addPlatform(@Valid @RequestBody Platform platform, @PathVariable("id") long id) {
         if (!gameRepo.exists(id) || !platformRepo.existsByName(platform.getName())) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         Game game = gameRepo.findById(id);
         List<Platform> list = game.getPlatforms();
         if (list.contains(platform)) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null ,HttpStatus.NOT_FOUND);
         }
         list.add(platform);
         game.setPlatforms(list);
         gameRepo.save(game);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(game.getPlatforms() ,HttpStatus.OK);
     }
 }
