@@ -3,6 +3,8 @@ package com.codecool.nerdSanctuary.controller;
 import com.codecool.nerdSanctuary.model.Platform;
 import com.codecool.nerdSanctuary.service.PlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,27 +17,27 @@ public class PlatformController {
     private PlatformService platformService;
 
     @GetMapping("/platform")
-    public List<Platform> getAllPlatform() {
-        return platformService.getAllPlatform();
+    public ResponseEntity<List<Platform>> getAllPlatform() {
+        return new ResponseEntity<>(platformService.getAllPlatform(), HttpStatus.OK);
     }
 
     @GetMapping("/platform/{id}")
-    public Platform getPlatform(@PathVariable long id) {
-        return platformService.getPlatform(id);
+    public ResponseEntity<Platform> getPlatform(@PathVariable long id) {
+        return new ResponseEntity<>(platformService.getPlatform(id), HttpStatus.OK);
     }
 
     @PostMapping("/platform")
-    public Platform savePlatform(@Valid @RequestBody Platform platform) {
-        return platformService.savePlatform(platform);
+    public ResponseEntity<Platform> savePlatform(@Valid @RequestBody Platform platform) {
+        return new ResponseEntity<>(platformService.savePlatform(platform), HttpStatus.CREATED);
     }
 
     @PutMapping("/platform/{id}")
-    public Platform updatePlatform(@PathVariable long id,@Valid @RequestBody Platform updatedPlatform) {
-        return platformService.updatePlatform(id, updatedPlatform);
+    public ResponseEntity<Platform> updatePlatform(@PathVariable long id,@Valid @RequestBody Platform updatedPlatform) {
+        return new ResponseEntity<>(platformService.updatePlatform(id, updatedPlatform), HttpStatus.OK);
     }
 
     @DeleteMapping("/platform/{id}")
-    public List<Platform> deletePlatform(@PathVariable long id) {
-        return platformService.deletePlatform(id);
+    public ResponseEntity<List<Platform>> deletePlatform(@PathVariable long id) {
+        return new ResponseEntity<>(platformService.deletePlatform(id), HttpStatus.OK);
     }
 }
