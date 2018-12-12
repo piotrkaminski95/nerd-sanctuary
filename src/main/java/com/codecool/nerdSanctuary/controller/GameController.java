@@ -4,10 +4,11 @@ import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.GameRepository;
 import com.codecool.nerdSanctuary.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController("/game")
@@ -30,7 +31,11 @@ public class GameController {
     }
 
     @PostMapping(value = "game/add")
-    public ResponseEntity<?> addGame(@RequestBody HashMap<String, Object> gameMap) {
-        return gameService.addGame(gameMap);
+    public ResponseEntity<?> addGame(@Valid @RequestBody Game game) {
+        if (gameRepo.existsByTitle(game.getTitle())) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        gameRepo.save(game);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
