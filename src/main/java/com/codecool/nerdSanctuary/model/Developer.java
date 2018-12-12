@@ -96,12 +96,6 @@ public class Developer {
         games.add(game);
     }
 
-    @PreRemove
-    public void deleteDeveloper(){
-        //TODO add log info
-        this.state = State.DELETED;
-    }
-
     public Developer update(Developer updatedDev) {
         Developer newDevWithUpdatedValues = new Developer();
         newDevWithUpdatedValues.setId(updatedDev.getId());
