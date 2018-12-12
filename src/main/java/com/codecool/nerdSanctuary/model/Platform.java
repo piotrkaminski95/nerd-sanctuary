@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@SQLDelete(sql = "UPDATE platform SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE platforms SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "state <> 'DELETED'")
 @NamedQuery(name = "Platform.FindByName", query = "SELECT a FROM Platform a WHERE a.name like :name ")
 @Table(name = "platforms")
@@ -60,11 +60,6 @@ public class Platform {
     public void setName(String name) {
         this.name = name;
     }
-
-    public void deletePlatform(){
-        //TODO add log info
-        this.state = State.DELETED;
-}
   
     public Platform update(Platform updatedPlatform) {
         Platform newPlatform = new Platform();
