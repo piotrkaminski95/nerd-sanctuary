@@ -26,7 +26,9 @@ public class Platform {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    public  Platform() {}
+    public  Platform() {
+        this.state = State.ACTIVE;
+    }
 
     public Platform(long id, String name) {
         this.id = id;

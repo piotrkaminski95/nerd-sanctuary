@@ -42,7 +42,9 @@ public class Game {
     @ManyToOne
     private Developer developer;
 
-    public Game() {}
+    public Game() {
+        this.state = State.ACTIVE;
+    }
 
     public Game(long id, String title, Genre genre, Calendar releaseDate, List<Platform> platforms, Developer developer) {
         this.id = id;
