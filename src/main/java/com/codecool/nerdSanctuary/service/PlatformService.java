@@ -36,4 +36,10 @@ public class PlatformService {
         logger.info(String.format("CRUD operation: CREATE Platform=%s", platform));
         return repository.save(platform);
     }
+
+
+    public Platform updatePlatform(long id, Platform updatedPlatform) {
+        logger.info(String.format("CRUD operation: UPDATE PLATFORM ID=%s", id));
+        return repository.save(getPlatform(id).update(updatedPlatform));
+    }
 }
