@@ -18,13 +18,13 @@ public class PlatformService {
     private Logger logger = LogManager.getLogger();
 
     public List<Platform> getAllPlatform() {
-        logger.info("CRUD operation: READ ALL PLATFORMS");
+        logger.info("CRUD operation: READ ALL Platform");
         return repository.findAll();
     }
 
 
     public Platform getPlatform(long id) {
-        logger.info(String.format("CRUD operation: READ PLATFORM ID=%s", id));
+        logger.info(String.format("CRUD operation: READ Platform ID=%s", id));
         if (repository.exists(id)) {
             return repository.findOne(id);
         }
@@ -39,7 +39,14 @@ public class PlatformService {
 
 
     public Platform updatePlatform(long id, Platform updatedPlatform) {
-        logger.info(String.format("CRUD operation: UPDATE PLATFORM ID=%s", id));
+        logger.info(String.format("CRUD operation: UPDATE Platform ID=%s", id));
         return repository.save(getPlatform(id).update(updatedPlatform));
+    }
+
+
+    public List<Platform> deletePlatform(long id) {
+        logger.info(String.format("CRUD operation: DELETE Platform ID=%s", id));
+        repository.delete(id);
+        return repository.findAll();
     }
 }
