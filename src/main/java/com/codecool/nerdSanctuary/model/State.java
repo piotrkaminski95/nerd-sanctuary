@@ -1,6 +1,6 @@
 package com.codecool.nerdSanctuary.model;
 
-public enum DeveloperState {
+public enum State {
 
     INACTIVE, ACTIVE, DELETED;
 }
