@@ -4,6 +4,7 @@ import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.model.Platform;
 import com.codecool.nerdSanctuary.repository.GameRepository;
+import com.codecool.nerdSanctuary.repository.PlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import java.util.List;
 public class GameController {
     @Autowired
     private GameRepository gameRepo;
+    @Autowired
+    private PlatformRepository platformRepo;
 
 //    TODO: extract methods body to service
 //    @Autowired
@@ -61,6 +64,22 @@ public class GameController {
         if (gameRepo.existsByTitle(game.getTitle())) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+        gameRepo.save(game);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "game/{id}/add/platform")
+    public ResponseEntity<?> addPlatform(@Valid @RequestBody Platform platform, @PathVariable("id") long id) {
+        if (!gameRepo.exists(id) || !platformRepo.existsByName(platform.getName())) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        Game game = gameRepo.findById(id);
+        List<Platform> list = game.getPlatforms();
+        if (list.contains(platform)) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        list.add(platform);
+        game.setPlatforms(list);
         gameRepo.save(game);
         return new ResponseEntity(HttpStatus.OK);
     }
