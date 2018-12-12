@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-@SQLDelete(sql = "UPDATE developer SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE developers SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "state <> 'DELETED'")
 @NamedQuery(name = "Developer.FindByName", query = "SELECT a FROM Developer a WHERE a.name like :name ")
 @Table(name = "developers")
