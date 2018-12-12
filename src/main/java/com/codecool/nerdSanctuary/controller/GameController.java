@@ -96,4 +96,21 @@ public class GameController {
         gameRepo.save(game);
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
+    @PutMapping("game/{id}/platforms")
+    public ResponseEntity<Game> editGamePlatforms(@Valid @RequestBody List<Platform> platforms, @PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        for (Platform p : platforms) {
+            if (!platformRepo.existsByName(p.getName())) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        }
+
+        Game game = gameRepo.findById(id);
+        game.setPlatforms(platforms);
+        gameRepo.save(game);
+        return new ResponseEntity<>(game, HttpStatus.OK);
+    }
 }
