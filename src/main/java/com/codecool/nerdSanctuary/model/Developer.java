@@ -25,6 +25,7 @@ public class Developer {
     private String name;
 
     @Column
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private State state;
 
