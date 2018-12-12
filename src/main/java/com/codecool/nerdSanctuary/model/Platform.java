@@ -28,10 +28,20 @@ public class Platform {
     public Platform(long id, String name) {
         this.id = id;
         this.name = name;
+        this.state = State.ACTIVE;
     }
 
     public Platform(String name) {
         this.name = name;
+        this.state = State.ACTIVE;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public long getId() {
@@ -53,6 +63,7 @@ public class Platform {
     @PreRemove
     public void deletePlatform(){
         //TODO add log info
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! its WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.state = State.DELETED;
     }
 

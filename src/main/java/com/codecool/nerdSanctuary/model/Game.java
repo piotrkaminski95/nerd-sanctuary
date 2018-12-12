@@ -49,6 +49,7 @@ public class Game {
         this.releaseDate = releaseDate;
         this.platforms = platforms;
         this.developer = developer;
+        this.state = State.ACTIVE;
     }
 
     public Game(String title, Genre genre, Calendar releaseDate, List<Platform> platforms, Developer developer) {
@@ -57,8 +58,16 @@ public class Game {
         this.releaseDate = releaseDate;
         this.platforms = platforms;
         this.developer = developer;
+        this.state = State.ACTIVE;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
 
     public long getId() {
         return id;

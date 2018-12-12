@@ -42,11 +42,21 @@ public class Developer {
         this.id = id;
         this.name = name;
         this.country = country;
+        this.state = State.ACTIVE;
     }
 
     public Developer(String name, String country) {
         this.name = name;
         this.country = country;
+        this.state = State.ACTIVE;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public long getId() {
