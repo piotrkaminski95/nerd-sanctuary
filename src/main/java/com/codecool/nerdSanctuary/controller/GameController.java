@@ -1,8 +1,8 @@
 package com.codecool.nerdSanctuary.controller;
 
 import com.codecool.nerdSanctuary.model.Game;
+import com.codecool.nerdSanctuary.model.Platform;
 import com.codecool.nerdSanctuary.repository.GameRepository;
-import com.codecool.nerdSanctuary.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,10 @@ import java.util.List;
 public class GameController {
     @Autowired
     private GameRepository gameRepo;
-    @Autowired
-    private GameService gameService;
+
+//    TODO: extract methods body to service
+//    @Autowired
+//    private GameService gameService;
 
     @GetMapping
     @ResponseBody
@@ -29,6 +31,14 @@ public class GameController {
     public Game getById(@PathVariable("id") long id) {
         return gameRepo.findOne(id);
     }
+
+    @GetMapping("/game/{id}/platforms")
+    @ResponseBody
+    public List<Platform> getPlatforms(@PathVariable("id") long id) {
+        Game game = gameRepo.findById(id);
+        return game.getPlatforms();
+    }
+
 
     @PostMapping(value = "game/add")
     public ResponseEntity<?> addGame(@Valid @RequestBody Game game) {
