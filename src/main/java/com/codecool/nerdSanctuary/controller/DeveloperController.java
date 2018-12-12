@@ -76,7 +76,7 @@ public class DeveloperController {
             return repository.save(developer).getGames();
 //        return service.addDeveloperGame(game);
         }
-        throw new IllegalArgumentException(String.format("Game=%s doesn not exist in database!", game));
+        throw new IllegalArgumentException(String.format("Game=%s doesn not exist in database!", game.getTitle()));
 
     }
 }
