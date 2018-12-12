@@ -2,12 +2,18 @@ package com.codecool.nerdSanctuary.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE games SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
+@Where(clause = "state <> 'DELETED'")
+@NamedQuery(name = "Game.FindByTitle", query = "SELECT a FROM Game a WHERE a.title like :title ")
 @Table(name = "games")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Game {
@@ -20,6 +26,10 @@ public class Game {
 
     @Enumerated
     private Genre genre;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     @Column(nullable = false)
     private Calendar releaseDate;
@@ -97,6 +107,12 @@ public class Game {
 
     public void setDeveloper(Developer developer) {
         this.developer = developer;
+    }
+
+    @PreRemove
+    public void deleteGame(){
+        //TODO add log info
+        this.state = State.DELETED;
     }
 
     @Override
