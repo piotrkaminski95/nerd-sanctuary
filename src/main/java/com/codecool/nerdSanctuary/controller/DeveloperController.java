@@ -57,4 +57,13 @@ public class DeveloperController {
     public Developer postDeveloper(@Valid @RequestBody Developer developer) {
         return repository.save(developer);
     }
+
+
+    @PostMapping("/developer/{id}/games")
+    public List<Game> postDeveloperGame(@PathVariable long id, @Valid @RequestBody Game game) {
+        Developer developer = repository.getOne(id);
+        developer.addGame(game);
+        return repository.save(developer).getGames();
+//        return service.addDeveloperGame(game);
+    }
 }
