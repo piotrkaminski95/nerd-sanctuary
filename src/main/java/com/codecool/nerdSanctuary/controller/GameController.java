@@ -133,4 +133,16 @@ public class GameController {
         gameRepo.save(game);
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
+
+    @DeleteMapping("game/{id}")
+    public ResponseEntity<Game> deleteGame(@PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        Game game = gameRepo.findById(id);
+
+        gameRepo.delete(game);
+        return new ResponseEntity<>(game, HttpStatus.OK);
+    }
 }
