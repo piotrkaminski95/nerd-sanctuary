@@ -37,7 +37,9 @@ public class Developer {
     @ElementCollection
     private List<Game> games;
 
-    public Developer() {}
+    public Developer() {
+        this.state = State.ACTIVE;
+    }
 
     public Developer(long id, String name, String country) {
         this.id = id;
