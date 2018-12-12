@@ -3,6 +3,7 @@ package com.codecool.nerdSanctuary.controller;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.model.Platform;
+import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import com.codecool.nerdSanctuary.repository.GameRepository;
 import com.codecool.nerdSanctuary.repository.PlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class GameController {
     private GameRepository gameRepo;
     @Autowired
     private PlatformRepository platformRepo;
+    @Autowired
+    private DeveloperRepository devRepo;
 
 //    TODO: extract methods body to service
 //    @Autowired
@@ -96,6 +99,7 @@ public class GameController {
         gameRepo.save(game);
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
+
     @PutMapping("game/{id}/platforms")
     public ResponseEntity<Game> editGamePlatforms(@Valid @RequestBody List<Platform> platforms, @PathVariable("id") long id) {
         if (!gameRepo.exists(id)) {
@@ -110,6 +114,22 @@ public class GameController {
 
         Game game = gameRepo.findById(id);
         game.setPlatforms(platforms);
+        gameRepo.save(game);
+        return new ResponseEntity<>(game, HttpStatus.OK);
+    }
+
+    @PutMapping("game/{id}/developer")
+    public ResponseEntity<Game> editDeveloper(@Valid @RequestBody Developer developer, @PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        if (!devRepo.existsByName(developer.getName())) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        Game game = gameRepo.findById(id);
+        game.setDeveloper(devRepo.findByName(developer.getName()));
         gameRepo.save(game);
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
