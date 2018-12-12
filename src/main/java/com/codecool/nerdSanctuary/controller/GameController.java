@@ -29,7 +29,7 @@ public class GameController {
         return gameRepo.findOne(id);
     }
 
-    @PostMapping(value = "game/addgame")
+    @PostMapping(value = "game/add")
     public ResponseEntity<?> addGame(@RequestBody HashMap<String, Object> gameMap) {
         return gameService.addGame(gameMap);
     }
