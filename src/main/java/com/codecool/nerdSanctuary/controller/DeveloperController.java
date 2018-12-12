@@ -71,9 +71,12 @@ public class DeveloperController {
     @PostMapping("/developer/{id}/games")
     public List<Game> postDeveloperGame(@PathVariable long id, @Valid @RequestBody Game game) {
         Developer developer = repository.getOne(id);
-
-        developer.addGame(game);
-        return repository.save(developer).getGames();
+        if (gameRepository.existsByTitle(game.getTitle())) {
+            developer.addGame(game);
+            return repository.save(developer).getGames();
 //        return service.addDeveloperGame(game);
+        }
+        throw new IllegalArgumentException(String.format("Game=%s doesn not exist in database!", game));
+
     }
 }
