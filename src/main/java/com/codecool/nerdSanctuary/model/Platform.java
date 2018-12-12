@@ -39,6 +39,13 @@ public class Platform {
         this.name = name;
     }
 
+    public Platform update(Platform updatedPlatform) {
+        Platform newPlatform = new Platform();
+        newPlatform.setId(updatedPlatform.getId());
+        newPlatform.setName(updatedPlatform.getName());
+        return newPlatform;
+    }
+
     @Override
     public String toString() {
         return "Platform{" +
