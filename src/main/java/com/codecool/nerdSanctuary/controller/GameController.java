@@ -3,9 +3,6 @@ package com.codecool.nerdSanctuary.controller;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.model.Platform;
-import com.codecool.nerdSanctuary.repository.DeveloperRepository;
-import com.codecool.nerdSanctuary.repository.GameRepository;
-import com.codecool.nerdSanctuary.repository.PlatformRepository;
 import com.codecool.nerdSanctuary.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +14,6 @@ import java.util.List;
 
 @RestController("/game")
 public class GameController {
-    @Autowired
-    private GameRepository gameRepo;
-    @Autowired
-    private PlatformRepository platformRepo;
-    @Autowired
-    private DeveloperRepository devRepo;
-
     @Autowired
     private GameService gameService;
 

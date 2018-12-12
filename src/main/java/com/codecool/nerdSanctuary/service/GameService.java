@@ -21,34 +21,6 @@ public class GameService {
     @Autowired
     private DeveloperRepository devRepo;
 
-//    toRemove
-//    @Autowired
-//    private BodyParserFactory requestBodyParserFactory;
-
-//    public GameService(BodyParserFactory requestBodyParserFactory) {
-//        this.requestBodyParserFactory = requestBodyParserFactory;
-//    }
-
-//    @SuppressWarnings("unchecked")
-//    public ResponseEntity<?> addGame(HashMap<String, Object> gameMap) {
-//        if (gameMap == null) {
-//            return new ResponseEntity(HttpStatus.NOT_FOUND);
-//        }
-//
-//        try {
-//            RequestBodyParser<Game> requestBodyParser = requestBodyParserFactory.getInstance("gameRequestBodyParser");
-//
-//            Game game = requestBodyParser.parseBody(gameMap);
-//            if (gameRepo.existsByTitle(game.getTitle())) {
-//                return new ResponseEntity(HttpStatus.NOT_FOUND);
-//            }
-//            gameRepo.save(game);
-//            return new ResponseEntity(HttpStatus.OK);
-//        } catch (NullPointerException | ClassNotFoundException | IllegalArgumentException | ClassCastException e) {
-//            return new ResponseEntity(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
     public GameService() {}
 
     public List<Game> getGames() {
