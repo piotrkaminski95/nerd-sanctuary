@@ -3,6 +3,7 @@ package com.codecool.nerdSanctuary.controller;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
+import com.codecool.nerdSanctuary.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,16 @@ public class DeveloperController {
     @Autowired
     private DeveloperRepository repository;
 
+    @Autowired
+    private GameRepository gameRepository;
+
     public void setRepository(DeveloperRepository repository) {
         this.repository = repository;
+    }
+
+
+    public void setGameRepository(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
     }
 
 
@@ -62,6 +71,7 @@ public class DeveloperController {
     @PostMapping("/developer/{id}/games")
     public List<Game> postDeveloperGame(@PathVariable long id, @Valid @RequestBody Game game) {
         Developer developer = repository.getOne(id);
+
         developer.addGame(game);
         return repository.save(developer).getGames();
 //        return service.addDeveloperGame(game);
