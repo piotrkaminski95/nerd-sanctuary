@@ -62,7 +62,7 @@ public class DeveloperService {
 
     public Developer updateDeveloper(long id, Developer updatedDev) {
         logger.info("CRUD operation: UPDATE DEVELOPER ID=%s", id);
-        return developerRepository.save(developerRepository.findOne(id).update(updatedDev));
+        return developerRepository.save(getDeveloper(id).update(updatedDev));
     }
 
 
