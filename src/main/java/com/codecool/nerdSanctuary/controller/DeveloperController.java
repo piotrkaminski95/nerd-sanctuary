@@ -91,4 +91,12 @@ public class DeveloperController {
         repository.delete(id);
         return repository.findAll();
     }
+
+
+    @DeleteMapping("/developer/{devId}/games/{gameId}")
+    public List<Game> deleteDeveloperGame(@PathVariable long devId, @PathVariable long gameId) {
+        Developer developer = repository.findOne(devId);
+        developer.removeGame(gameId);
+        return repository.save(developer).getGames();
+    }
 }
