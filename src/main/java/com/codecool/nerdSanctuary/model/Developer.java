@@ -70,7 +70,10 @@ public class Developer {
         this.games = games;
     }
 
-
+    public void addGame(Game game) {
+        game.setDeveloper(this);
+        games.add(game);
+    }
 
     @Override
     public String toString() {
