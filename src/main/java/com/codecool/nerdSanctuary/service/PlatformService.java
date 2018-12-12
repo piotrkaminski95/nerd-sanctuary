@@ -30,4 +30,10 @@ public class PlatformService {
         }
         throw new IllegalArgumentException(String.format("ID=%s does not exist", id));
     }
+
+
+    public Platform savePlatform(Platform platform) {
+        logger.info(String.format("CRUD operation: CREATE Platform=%s", platform));
+        return repository.save(platform);
+    }
 }
