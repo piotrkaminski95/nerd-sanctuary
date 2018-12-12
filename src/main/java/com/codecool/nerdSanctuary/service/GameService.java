@@ -60,7 +60,7 @@ public class GameService {
     public Game addGame(Game newGame) {
         logger.info("CRUD operation: ADD GAME");
         if (gameRepo.existsByTitle(newGame.getTitle())) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
+            logger.info(String.format("ERROR: ID=%s IS EXIST!", newGame.getId()));
             return null;
         }
         gameRepo.save(newGame);
