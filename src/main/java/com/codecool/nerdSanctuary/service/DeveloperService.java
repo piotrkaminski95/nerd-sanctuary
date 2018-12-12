@@ -32,7 +32,7 @@ public class DeveloperService {
         if (developerRepository.exists(id)) {
             return developerRepository.findOne(id);
         }
-        throw new IllegalArgumentException(String.format("ID = %s does not exist!"));
+        throw new IllegalArgumentException(String.format("ID = %s does not exist!", id));
     }
 
     public List<Game> getDeveloperGames(long id) {
