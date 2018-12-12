@@ -13,7 +13,7 @@ import java.util.Optional;
 @Entity
 @SQLDelete(sql = "UPDATE developer SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "state <> 'DELETED'")
-@NamedQuery(name = "Account.FindByName", query = "SELECT a FROM Developer a WHERE a.name like :name ")
+@NamedQuery(name = "Developer.FindByName", query = "SELECT a FROM Developer a WHERE a.name like :name ")
 @Table(name = "developers")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Developer {
@@ -26,7 +26,7 @@ public class Developer {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private DeveloperState state;
+    private State state;
 
     @Column(nullable = false)
     private String country;
@@ -89,7 +89,7 @@ public class Developer {
     @PreRemove
     public void deleteDeveloper(){
         //TODO add log info
-        this.state = DeveloperState.DELETED;
+        this.state = State.DELETED;
     }
 
     public Developer update(Developer updatedDev) {
