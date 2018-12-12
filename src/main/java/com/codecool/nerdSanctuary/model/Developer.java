@@ -1,12 +1,14 @@
 package com.codecool.nerdSanctuary.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "developers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Developer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,8 +20,9 @@ public class Developer {
     @Column(nullable = false)
     private String country;
 
-    @OneToMany(mappedBy = "developer")
+    @OneToMany(mappedBy = "developer", cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JsonIgnore
+    @ElementCollection
     private List<Game> games;
 
     public Developer() {}
@@ -66,6 +69,8 @@ public class Developer {
     public void setGames(List<Game> games) {
         this.games = games;
     }
+
+
 
     @Override
     public String toString() {
