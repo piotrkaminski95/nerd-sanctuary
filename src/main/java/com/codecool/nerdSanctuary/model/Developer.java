@@ -2,12 +2,18 @@ package com.codecool.nerdSanctuary.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
 @Entity
+@SQLDelete(sql = "UPDATE developer SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
+@Where(clause = "state <> 'DELETED'")
+@NamedQuery(name = "Account.FindByName", query = "SELECT a FROM Developer a WHERE a.name like :name ")
 @Table(name = "developers")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Developer {
@@ -17,6 +23,10 @@ public class Developer {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private DeveloperState state;
 
     @Column(nullable = false)
     private String country;
@@ -74,6 +84,12 @@ public class Developer {
     public void addGame(Game game) {
         game.setDeveloper(this);
         games.add(game);
+    }
+
+    @PreRemove
+    public void deleteDeveloper(){
+        //TODO add log info
+        this.state = DeveloperState.DELETED;
     }
 
     public Developer update(Developer updatedDev) {
