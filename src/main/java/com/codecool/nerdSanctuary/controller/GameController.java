@@ -6,6 +6,7 @@ import com.codecool.nerdSanctuary.model.Platform;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import com.codecool.nerdSanctuary.repository.GameRepository;
 import com.codecool.nerdSanctuary.repository.PlatformRepository;
+import com.codecool.nerdSanctuary.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,126 +24,141 @@ public class GameController {
     @Autowired
     private DeveloperRepository devRepo;
 
-//    TODO: extract methods body to service
-//    @Autowired
-//    private GameService gameService;
+    @Autowired
+    private GameService gameService;
 
     @GetMapping("/game")
     @ResponseBody
     public List<Game> getAllGames() {
-        return gameRepo.findAll();
+        return gameService.getGames();
     }
 
     @GetMapping("/game/{id}")
     @ResponseBody
     public ResponseEntity<Game> getById(@PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Game game = gameService.getGame(id);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
-        return new ResponseEntity<>(gameRepo.findById(id), HttpStatus.OK);
+
+        return new ResponseEntity<>(game, status);
     }
 
     @GetMapping("/game/{id}/platforms")
     @ResponseBody
     public ResponseEntity<List<Platform>> getPlatforms(@PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        List<Platform> platforms = gameService.getPlatforms(id);
+        HttpStatus status;
+
+        if (platforms == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
-        Game game = gameRepo.findById(id);
-        return new ResponseEntity<>(game.getPlatforms(), HttpStatus.OK);
+
+        return new ResponseEntity<>(platforms, status);
     }
 
     @GetMapping("/game/{id}/developer")
     @ResponseBody
     public ResponseEntity<Developer> getDeveloper(@PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Developer developer = gameService.getDeveloper(id);
+        HttpStatus status;
+
+        if (developer == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
-        Game game = gameRepo.findById(id);
-        return new ResponseEntity<>(game.getDeveloper(), HttpStatus.OK);
+
+        return new ResponseEntity<>(developer, status);
     }
 
     @PostMapping(value = "game/add")
-    public ResponseEntity<Game> addGame(@Valid @RequestBody Game game) {
-        if (gameRepo.existsByTitle(game.getTitle())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Game> addGame(@Valid @RequestBody Game newGame) {
+        Game game = gameService.addGame(newGame);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
-        gameRepo.save(game);
-        return new ResponseEntity<>(gameRepo.findByTitle(game.getTitle()), HttpStatus.OK);
+
+        return new ResponseEntity<>(game, status);
     }
 
     @PostMapping(value = "game/{id}/add/platform")
-    public ResponseEntity<List<Platform>> addPlatform(@Valid @RequestBody Platform platform, @PathVariable("id") long id) {
-        if (!gameRepo.exists(id) || !platformRepo.existsByName(platform.getName())) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    public ResponseEntity<Game> addPlatform(@Valid @RequestBody Platform platform, @PathVariable("id") long id) {
+        Game game = gameService.addPlatform(platform, id);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
-        Game game = gameRepo.findById(id);
-        List<Platform> list = game.getPlatforms();
-        if (list.contains(platform)) {
-            return new ResponseEntity<>(null ,HttpStatus.NOT_FOUND);
-        }
-        list.add(platform);
-        game.setPlatforms(list);
-        gameRepo.save(game);
-        return new ResponseEntity<>(game.getPlatforms() ,HttpStatus.OK);
+
+        return new ResponseEntity<>(game, status);
     }
 
     @PutMapping("game/{id}")
-    public ResponseEntity<Game> editGame(@Valid @RequestBody Game game, @PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    public ResponseEntity<Game> editGame(@Valid @RequestBody Game newGame, @PathVariable("id") long id) {
+        Game game = gameService.editGame(newGame, id);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
-        Game oldGame = gameRepo.findById(id);
-        game.setId(id);
-        game.setPlatforms(oldGame.getPlatforms());
-        game.setDeveloper(oldGame.getDeveloper());
-        gameRepo.save(game);
-        return new ResponseEntity<>(game, HttpStatus.OK);
+
+        return new ResponseEntity<>(game, status);
     }
 
     @PutMapping("game/{id}/platforms")
     public ResponseEntity<Game> editGamePlatforms(@Valid @RequestBody List<Platform> platforms, @PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Game game = gameService.editGamePlatforms(platforms, id);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
 
-        for (Platform p : platforms) {
-            if (!platformRepo.existsByName(p.getName())) {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
-        }
-
-        Game game = gameRepo.findById(id);
-        game.setPlatforms(platforms);
-        gameRepo.save(game);
-        return new ResponseEntity<>(game, HttpStatus.OK);
+        return new ResponseEntity<>(game, status);
     }
 
     @PutMapping("game/{id}/developer")
     public ResponseEntity<Game> editDeveloper(@Valid @RequestBody Developer developer, @PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Game game = gameService.editDeveloper(developer, id);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
 
-        if (!devRepo.existsByName(developer.getName())) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-
-        Game game = gameRepo.findById(id);
-        game.setDeveloper(devRepo.findByName(developer.getName()));
-        gameRepo.save(game);
-        return new ResponseEntity<>(game, HttpStatus.OK);
+        return new ResponseEntity<>(game, status);
     }
 
     @DeleteMapping("game/{id}")
     public ResponseEntity<Game> deleteGame(@PathVariable("id") long id) {
-        if (!gameRepo.exists(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Game game = gameService.deleteGame(id);
+        HttpStatus status;
+
+        if (game == null) {
+            status = HttpStatus.NOT_FOUND;
+        } else {
+            status = HttpStatus.OK;
         }
 
-        Game game = gameRepo.findById(id);
-
-        gameRepo.delete(game);
-        return new ResponseEntity<>(game, HttpStatus.OK);
+        return new ResponseEntity<>(game, status);
     }
 }
