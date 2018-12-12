@@ -77,6 +77,11 @@ public class DeveloperController {
 //        return service.addDeveloperGame(game);
         }
         throw new IllegalArgumentException(String.format("Game=%s doesn not exist in database!", game.getTitle()));
+    }
 
+
+    @PutMapping("/developer/{id}")
+    public Developer updateDeveloper(@PathVariable long id, @Valid @RequestBody Developer updatedDev) {
+        return repository.save(repository.findOne(id).update(updatedDev));
     }
 }
