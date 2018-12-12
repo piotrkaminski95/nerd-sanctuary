@@ -34,7 +34,7 @@ public class Game {
     @Column(nullable = false)
     private Calendar releaseDate;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     private List<Platform> platforms;
 
     @ManyToOne

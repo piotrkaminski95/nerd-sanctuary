@@ -5,6 +5,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @SQLDelete(sql = "UPDATE platform SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
@@ -60,11 +61,16 @@ public class Platform {
         this.name = name;
     }
 
-    @PreRemove
     public void deletePlatform(){
         //TODO add log info
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! its WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.state = State.DELETED;
+}
+  
+    public Platform update(Platform updatedPlatform) {
+        Platform newPlatform = new Platform();
+        newPlatform.setId(updatedPlatform.getId());
+        newPlatform.setName(updatedPlatform.getName());
+        return newPlatform;
     }
 
     @Override
@@ -73,5 +79,18 @@ public class Platform {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Platform platform = (Platform) o;
+        return getName().equals(platform.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }
