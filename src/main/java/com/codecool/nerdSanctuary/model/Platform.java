@@ -1,8 +1,15 @@
 package com.codecool.nerdSanctuary.model;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 
 @Entity
+@SQLDelete(sql = "UPDATE platform SET state = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
+@Where(clause = "state <> 'DELETED'")
+@NamedQuery(name = "Platform.FindByName", query = "SELECT a FROM Platform a WHERE a.name like :name ")
 @Table(name = "platforms")
 public class Platform {
     @Id
@@ -11,6 +18,10 @@ public class Platform {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     public  Platform() {}
 
@@ -37,6 +48,12 @@ public class Platform {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @PreRemove
+    public void deletePlatform(){
+        //TODO add log info
+        this.state = State.DELETED;
     }
 
     @Override
