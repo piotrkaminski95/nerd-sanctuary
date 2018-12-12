@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface GameRepository extends CrudRepository<Game, Long> {
     List<Game> findAll();
+    Game findById(Long id);
+    Game findByTitle(String title);
+
+    boolean existsByTitle(String title);
 }

@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeveloperRepository extends CrudRepository<Developer, Long> {
+    boolean existsByName(String name);
+
+    Developer findByName(String name);
 }
