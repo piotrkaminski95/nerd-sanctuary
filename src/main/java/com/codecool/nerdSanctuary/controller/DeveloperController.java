@@ -62,6 +62,12 @@ public class DeveloperController {
     }
 
 
+    @GetMapping("/developer/{devId}/games/{gameId}")
+    public Game getDeveloperGame(@PathVariable long devId, @PathVariable long gameId) {
+        return getDeveloper(devId).getGame(gameId);
+    }
+
+
     @PostMapping("/developer")
     public Developer postDeveloper(@Valid @RequestBody Developer developer) {
         return repository.save(developer);
