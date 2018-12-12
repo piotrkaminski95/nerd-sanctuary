@@ -84,4 +84,11 @@ public class DeveloperController {
     public Developer updateDeveloper(@PathVariable long id, @Valid @RequestBody Developer updatedDev) {
         return repository.save(repository.findOne(id).update(updatedDev));
     }
+
+
+    @DeleteMapping("/developer/{id}")
+    public List<Developer> deleteDeveloper(@PathVariable long id) {
+        repository.delete(id);
+        return repository.findAll();
+    }
 }
