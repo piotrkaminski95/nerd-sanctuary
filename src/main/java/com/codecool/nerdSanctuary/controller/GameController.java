@@ -1,5 +1,6 @@
 package com.codecool.nerdSanctuary.controller;
 
+import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.model.Platform;
 import com.codecool.nerdSanctuary.repository.GameRepository;
@@ -28,17 +29,32 @@ public class GameController {
 
     @GetMapping("/game/{id}")
     @ResponseBody
-    public Game getById(@PathVariable("id") long id) {
-        return gameRepo.findOne(id);
+    public ResponseEntity<Game> getById(@PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(gameRepo.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/game/{id}/platforms")
     @ResponseBody
-    public List<Platform> getPlatforms(@PathVariable("id") long id) {
+    public ResponseEntity<List<Platform>> getPlatforms(@PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         Game game = gameRepo.findById(id);
-        return game.getPlatforms();
+        return new ResponseEntity<>(game.getPlatforms(), HttpStatus.OK);
     }
 
+    @GetMapping("/game/{id}/developer")
+    @ResponseBody
+    public ResponseEntity<Developer> getDeveloper(@PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        Game game = gameRepo.findById(id);
+        return new ResponseEntity<>(game.getDeveloper(), HttpStatus.OK);
+    }
 
     @PostMapping(value = "game/add")
     public ResponseEntity<?> addGame(@Valid @RequestBody Game game) {
