@@ -4,6 +4,8 @@ import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import com.codecool.nerdSanctuary.repository.GameRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class DeveloperService {
 
     @Autowired
     private GameRepository gameRepository;
+
+    private Logger logger = LogManager.getLogger();
 
     public List<Developer> getAllDeveloper() {
         return developerRepository.findAll();
