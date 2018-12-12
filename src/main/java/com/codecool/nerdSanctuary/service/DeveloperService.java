@@ -68,6 +68,11 @@ public class DeveloperService {
 
     public List<Developer> deleteDeveloper(long id) {
         logger.info(String.format("CRUD operation: DELETE Developer ID=%s", id));
+        Developer developer = developerRepository.findOne(id);
+        developer.getGames().forEach(game -> {
+            game.setDeveloper(null);
+            gameRepository.save(game);
+        });
         developerRepository.delete(id);
         return developerRepository.findAll();
     }
