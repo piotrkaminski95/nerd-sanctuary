@@ -24,7 +24,7 @@ public class GameController {
 //    @Autowired
 //    private GameService gameService;
 
-    @GetMapping
+    @GetMapping("/game")
     @ResponseBody
     public List<Game> getAllGames() {
         return gameRepo.findAll();
@@ -82,5 +82,18 @@ public class GameController {
         game.setPlatforms(list);
         gameRepo.save(game);
         return new ResponseEntity<>(game.getPlatforms() ,HttpStatus.OK);
+    }
+
+    @PutMapping("game/{id}")
+    public ResponseEntity<Game> editGame(@Valid @RequestBody Game game, @PathVariable("id") long id) {
+        if (!gameRepo.exists(id)) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        Game oldGame = gameRepo.findById(id);
+        game.setId(id);
+        game.setPlatforms(oldGame.getPlatforms());
+        game.setDeveloper(oldGame.getDeveloper());
+        gameRepo.save(game);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 }
