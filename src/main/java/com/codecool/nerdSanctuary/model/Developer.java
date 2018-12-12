@@ -75,6 +75,14 @@ public class Developer {
         games.add(game);
     }
 
+    public Developer update(Developer updatedDev) {
+        Developer newDevWithUpdatedValues = new Developer();
+        newDevWithUpdatedValues.setId(updatedDev.getId());
+        newDevWithUpdatedValues.setCountry(updatedDev.getCountry());
+        newDevWithUpdatedValues.setName(updatedDev.getName());
+        return newDevWithUpdatedValues;
+    }
+
     @Override
     public String toString() {
         return "Developer{" +
