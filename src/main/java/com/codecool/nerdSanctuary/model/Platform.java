@@ -1,5 +1,6 @@
 package com.codecool.nerdSanctuary.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -21,6 +22,7 @@ public class Platform {
     private String name;
 
     @Column
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private State state;
 

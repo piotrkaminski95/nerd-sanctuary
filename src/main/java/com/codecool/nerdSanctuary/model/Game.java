@@ -1,6 +1,7 @@
 package com.codecool.nerdSanctuary.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
@@ -28,6 +29,7 @@ public class Game {
     private Genre genre;
 
     @Column
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private State state;
 
