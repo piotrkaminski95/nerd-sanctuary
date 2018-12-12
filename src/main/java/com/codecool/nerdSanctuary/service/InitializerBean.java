@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 @Component
 public class InitializerBean {
@@ -64,24 +65,32 @@ public class InitializerBean {
     private ArrayList<Game> createGameList(ArrayList<Platform> pList, ArrayList<Developer> d) throws ParseException {
         ArrayList<Game> list = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
+        Calendar c = Calendar.getInstance();
         Platform[] p;
+
         p = new Platform[]{pList.get(0), pList.get(2)};
-        list.add(new Game("Red Dead Redemption", Genre.ACTION, sdf.parse("2010-05-18"), new ArrayList<>(Arrays.asList(p)), d.get(0)));
+        c.set(2010, Calendar.MAY,18);
+        list.add(new Game("Red Dead Redemption", Genre.ACTION, c, new ArrayList<>(Arrays.asList(p)), d.get(0)));
 
         p = new Platform[]{pList.get(1), pList.get(3), pList.get(5)};
-        list.add(new Game("The Witcher 3: Wild Hunt", Genre.RPG, sdf.parse("2015-05-19"), new ArrayList<>(Arrays.asList(p)), d.get(1)));
+        c.set(2015, Calendar.MAY,19);
+        list.add(new Game("The Witcher 3: Wild Hunt", Genre.RPG, c, new ArrayList<>(Arrays.asList(p)), d.get(1)));
 
         p = new Platform[]{pList.get(3), pList.get(5)};
-        list.add(new Game("Red Dead Redemption 2", Genre.ACTION, sdf.parse("2018-10-26"), new ArrayList<>(Arrays.asList(p)), d.get(0)));
+        c.set(2018, Calendar.OCTOBER,26);
+        list.add(new Game("Red Dead Redemption 2", Genre.ACTION, c, new ArrayList<>(Arrays.asList(p)), d.get(0)));
 
         p = new Platform[]{pList.get(5), pList.get(3)};
-        list.add(new Game("NiOh", Genre.ACTION, sdf.parse("2017-02-07"), new ArrayList<>(Arrays.asList(p)), d.get(3)));
+        c.set(2017, Calendar.FEBRUARY,7);
+        list.add(new Game("NiOh", Genre.ACTION, c, new ArrayList<>(Arrays.asList(p)), d.get(3)));
 
         p = new Platform[]{pList.get(5), pList.get(3), pList.get(1)};
-        list.add(new Game("Dark Souls 3", Genre.ACTION, sdf.parse("2016-03-24"), new ArrayList<>(Arrays.asList(p)), d.get(2)));
+        c.set(2016, Calendar.MARCH,24);
+        list.add(new Game("Dark Souls 3", Genre.ACTION, c, new ArrayList<>(Arrays.asList(p)), d.get(2)));
 
         p = new Platform[]{pList.get(1), pList.get(3), pList.get(5)};
-        list.add(new Game("BattleField V", Genre.ACTION, sdf.parse("2018-11-09"), new ArrayList<>(Arrays.asList(p)), d.get(4)));
+        c.set(2018, Calendar.NOVEMBER,9);
+        list.add(new Game("BattleField V", Genre.ACTION, c, new ArrayList<>(Arrays.asList(p)), d.get(4)));
 
         return list;
     }
