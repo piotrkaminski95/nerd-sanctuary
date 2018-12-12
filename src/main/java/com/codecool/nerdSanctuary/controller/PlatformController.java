@@ -29,7 +29,7 @@ public class PlatformController {
         return platformService.savePlatform(platform);
     }
 
-    @PostMapping("/platform/{id}")
+    @PutMapping("/platform/{id}")
     public Platform updatePlatform(@PathVariable long id,@Valid @RequestBody Platform updatedPlatform) {
         return platformService.updatePlatform(id, updatedPlatform);
     }
