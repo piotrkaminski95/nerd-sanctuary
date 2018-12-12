@@ -1,6 +1,7 @@
 package com.codecool.nerdSanctuary.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "games")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +27,7 @@ public class Game {
     @ManyToMany
     private List<Platform> platforms;
 
-    @OneToOne
+    @ManyToOne
     private Developer developer;
 
     public Game() {}
