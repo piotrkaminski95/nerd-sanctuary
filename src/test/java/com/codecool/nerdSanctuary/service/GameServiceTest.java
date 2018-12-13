@@ -25,8 +25,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 //import org.junit.runner.RunWith;
 
@@ -238,6 +237,50 @@ class GameServiceTest {
         verify(mockGameRepo).save(any(Game.class));
         assertEquals(expected, actual);
     }
+
+    @Test
+    void editNotExistingGamePlatformsThrowException() throws ParseException {
+        String expectedMessage = String.format("Game %s not exist!", 0);
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(false);
+
+        Executable act = () -> { gameService.editGamePlatforms(new ArrayList<>(), 0); };
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void editGameWithNotExistingPlatformThrowException() throws ParseException {
+        Platform platform = new Platform("expected");
+        ArrayList<Platform> platforms = new ArrayList<>();
+        platforms.add(platform);
+        String expectedMessage = String.format("Platform %s is not exist!", platform.getName());
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockPlatformRepo.existsByName(anyString())).thenReturn(false);
+
+        Executable act = () -> { gameService.editGamePlatforms(platforms, 0); };
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void editGamePlatformsWithProvidedId() throws ParseException {
+        List<Game> games = createGameList();
+        Game sample = games.get(0);
+        List<Platform> expected = sample.getPlatforms();
+        expected.add(new Platform("expected"));
+        Game actual;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockPlatformRepo.existsByName(anyString())).thenReturn(true);
+        when(mockGameRepo.findById(anyLong())).thenReturn(sample);
+
+        actual = gameService.editGamePlatforms(expected, 0);
+
+        verify(mockGameRepo).save(any(Game.class));
+        assertEquals(expected, actual.getPlatforms());
+    }
+
 
     // Helpers
     private ArrayList<Platform> createPlatformList() {
