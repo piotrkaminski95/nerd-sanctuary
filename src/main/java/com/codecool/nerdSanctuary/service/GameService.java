@@ -1,5 +1,7 @@
 package com.codecool.nerdSanctuary.service;
 
+import com.codecool.nerdSanctuary.exceptions.BadRequestException;
+import com.codecool.nerdSanctuary.exceptions.ResourceNotFoundException;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.model.Platform;
@@ -17,7 +19,6 @@ import java.util.List;
 public class GameService {
     @Autowired
     private GameRepository gameRepo;
-
     @Autowired
     private PlatformRepository platformRepo;
     @Autowired
@@ -33,6 +34,9 @@ public class GameService {
     }
 
     public Game getGame(long id) {
+        if (!gameRepo.exists(id)) {
+            throw new ResourceNotFoundException(String.format("Game ID: %s is not exist!", id));
+        }
         return gameRepo.findById(id);
     }
 
@@ -40,8 +44,7 @@ public class GameService {
         logger.info(String.format("CRUD operation: READ GAME ID=%s", id));
 
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
         }
         Game game = gameRepo.findById(id);
         return game.getPlatforms();
@@ -50,8 +53,7 @@ public class GameService {
     public Developer getDeveloper(long id) {
         logger.info(String.format("CRUD operation: GET GAME ID=%s DEVELOPER", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
         }
         Game game = gameRepo.findById(id);
         return game.getDeveloper();
@@ -60,8 +62,7 @@ public class GameService {
     public Game addGame(Game newGame) {
         logger.info("CRUD operation: ADD GAME");
         if (gameRepo.existsByTitle(newGame.getTitle())) {
-            logger.info(String.format("ERROR: ID=%s IS EXIST!", newGame.getId()));
-            return null;
+            throw new BadRequestException(String.format("Game %s exist!", newGame.getTitle()));
         }
         gameRepo.save(newGame);
         return gameRepo.findByTitle(newGame.getTitle());
@@ -70,14 +71,12 @@ public class GameService {
     public Game addPlatform(Platform platform, long id) {
         logger.info(String.format("CRUD operation: ADD PLATFORM TO GAME ID=%s", id));
         if (!gameRepo.exists(id) || !platformRepo.existsByName(platform.getName())) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
         }
         Game game = gameRepo.findById(id);
         List<Platform> list = game.getPlatforms();
         if (list.contains(platform)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new BadRequestException(String.format("Platform %s exist", platform.getName()));
         }
         list.add(platform);
         game.setPlatforms(list);
@@ -88,8 +87,7 @@ public class GameService {
     public Game editGame(Game game, long id) {
         logger.info(String.format("CRUD operation: UPDATE GAME ID=%s", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw  new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
         }
         Game oldGame = gameRepo.findById(id);
         game.setId(id);
@@ -102,14 +100,11 @@ public class GameService {
     public Game editGamePlatforms(List<Platform> platforms, long id) {
         logger.info(String.format("CRUD operation: UPDATE GAME ID=%s PLATFORM LIST", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
         }
-
         for (Platform p : platforms) {
             if (!platformRepo.existsByName(p.getName())) {
-                logger.info(String.format("ERROR: PLATFORM=%s IS NOT EXIST!", p.getName()));
-                return null;
+                throw new ResourceNotFoundException(String.format("Platform %s is not exist!", p.getName()));
             }
         }
 
@@ -122,13 +117,11 @@ public class GameService {
     public Game editDeveloper(Developer developer, long id) {
         logger.info(String.format("CRUD operation: UPDATE GAME ID=%s DEVELOPER", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
         }
 
         if (!devRepo.existsByName(developer.getName())) {
-            logger.info(String.format("ERROR: DEVELOPER=%s IS NOT EXIST!", developer.getName()));
-            return null;
+            logger.info(String.format("Developer %s is not exist!", developer.getName()));
         }
 
         Game game = gameRepo.findById(id);
@@ -140,8 +133,7 @@ public class GameService {
     public Game deleteGame(long id) {
         logger.info(String.format("CRUD operation: DELETE GAME ID=%s", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            logger.info(String.format("Game ID=%s is no exist!", id));
         }
 
         Game game = gameRepo.findById(id);

@@ -1,5 +1,6 @@
 package com.codecool.nerdSanctuary.service;
 
+import com.codecool.nerdSanctuary.exceptions.ResourceNotFoundException;
 import com.codecool.nerdSanctuary.model.Platform;
 import com.codecool.nerdSanctuary.repository.PlatformRepository;
 import org.apache.logging.log4j.LogManager;
@@ -28,12 +29,15 @@ public class PlatformService {
         if (repository.exists(id)) {
             return repository.findOne(id);
         }
-        throw new IllegalArgumentException(String.format("ID=%s does not exist", id));
+        throw new ResourceNotFoundException(String.format("Platform ID=%s does not exist", id));
     }
 
 
     public Platform savePlatform(Platform platform) {
         logger.info(String.format("CRUD operation: CREATE Platform=%s", platform));
+        if (repository.existsByName(platform.getName())) {
+            throw new ResourceNotFoundException(String.format("Platform %s does exist", platform.getName()));
+        }
         return repository.save(platform);
     }
 

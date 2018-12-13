@@ -1,5 +1,6 @@
 package com.codecool.nerdSanctuary.service;
 
+import com.codecool.nerdSanctuary.exceptions.ResourceNotFoundException;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
@@ -32,16 +33,22 @@ public class DeveloperService {
         if (developerRepository.exists(id)) {
             return developerRepository.findOne(id);
         }
-        throw new IllegalArgumentException(String.format("ID = %s does not exist!", id));
+        throw new ResourceNotFoundException(String.format("Developer ID = %s does not exist!", id));
     }
 
     public List<Game> getDeveloperGames(long id) {
         logger.info("CRUD operation: READ ALL Developer Game");
-        return getDeveloper(id).getGames();
+        if (developerRepository.exists(id)) {
+            return getDeveloper(id).getGames();
+        }
+        throw new ResourceNotFoundException(String.format("Developer ID = %s does not exist!", id));
     }
 
     public Developer saveDeveloper(Developer developer) {
         logger.info(String.format("CRUD operation: CREATE Developer=%s", developer));
+        if (developerRepository.existsByName(developer.getName())) {
+            throw new ResourceNotFoundException(String.format("Developer %s does exist!", developer.getName()));
+        }
         return developerRepository.save(developer);
     }
 
@@ -52,7 +59,7 @@ public class DeveloperService {
             developer.addGame(game);
             return developerRepository.save(developer).getGames();
         }
-        throw new IllegalArgumentException(String.format("Game=%s doesn't not exist in database!", game.getTitle()));
+        throw new ResourceNotFoundException(String.format("Game=%s doesn't not exist in database!", game.getTitle()));
     }
 
     public Game getDeveloperGame(long devId, long gameId) {

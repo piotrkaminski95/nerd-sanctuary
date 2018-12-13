@@ -27,128 +27,65 @@ public class GameController {
     @ResponseBody
     public ResponseEntity<Game> getById(@PathVariable("id") long id) {
         Game game = gameService.getGame(id);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
     @GetMapping("/game/{id}/platforms")
     @ResponseBody
     public ResponseEntity<List<Platform>> getPlatforms(@PathVariable("id") long id) {
         List<Platform> platforms = gameService.getPlatforms(id);
-        HttpStatus status;
 
-        if (platforms == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(platforms, status);
+        return new ResponseEntity<>(platforms, HttpStatus.OK);
     }
 
     @GetMapping("/game/{id}/developer")
     @ResponseBody
     public ResponseEntity<Developer> getDeveloper(@PathVariable("id") long id) {
         Developer developer = gameService.getDeveloper(id);
-        HttpStatus status;
 
-        if (developer == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(developer, status);
+        return new ResponseEntity<>(developer, HttpStatus.OK);
     }
 
-    @PostMapping(value = "game/add")
+    @PostMapping(value = "game")
     public ResponseEntity<Game> addGame(@Valid @RequestBody Game newGame) {
         Game game = gameService.addGame(newGame);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "game/{id}/add/platform")
+    @PostMapping(value = "game/{id}/platform")
     public ResponseEntity<Game> addPlatform(@Valid @RequestBody Platform platform, @PathVariable("id") long id) {
         Game game = gameService.addPlatform(platform, id);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.CREATED);
     }
 
     @PutMapping("game/{id}")
     public ResponseEntity<Game> editGame(@Valid @RequestBody Game newGame, @PathVariable("id") long id) {
         Game game = gameService.editGame(newGame, id);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
     @PutMapping("game/{id}/platforms")
     public ResponseEntity<Game> editGamePlatforms(@Valid @RequestBody List<Platform> platforms, @PathVariable("id") long id) {
         Game game = gameService.editGamePlatforms(platforms, id);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
     @PutMapping("game/{id}/developer")
     public ResponseEntity<Game> editDeveloper(@Valid @RequestBody Developer developer, @PathVariable("id") long id) {
         Game game = gameService.editDeveloper(developer, id);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
     @DeleteMapping("game/{id}")
     public ResponseEntity<Game> deleteGame(@PathVariable("id") long id) {
         Game game = gameService.deleteGame(id);
-        HttpStatus status;
 
-        if (game == null) {
-            status = HttpStatus.NOT_FOUND;
-        } else {
-            status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(game, status);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 }
