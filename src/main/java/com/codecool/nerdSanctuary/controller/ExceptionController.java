@@ -40,7 +40,6 @@ public class ExceptionController {
     }
 
 
-    //    TEST EMAIL= testsendmail.nerdsanctuary@gmail.com password= test-mail
     public void sendEmail(RuntimeException exception, String message) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
