@@ -14,13 +14,17 @@ public class ExceptionController {
 
     @ExceptionHandler(RuntimeException.class)
     public RuntimeException handleRunTimeException(RuntimeException exception, HttpServletResponse response) {
-        String message = String.format(
-            "%s - STATUS CODE= %s - %s",
-            exception.getClass().getSimpleName(),
-            response.getStatus(),
-            exception.getMessage()
-        );
-        logger.error(message);
+        logger.error(getMessage(exception, response));
         return exception;
+    }
+
+
+    private String getMessage(RuntimeException exception, HttpServletResponse response) {
+        return String.format(
+                "%s - STATUS CODE= %s - %s",
+                exception.getClass().getSimpleName(),
+                response.getStatus(),
+                exception.getMessage()
+        );
     }
 }
