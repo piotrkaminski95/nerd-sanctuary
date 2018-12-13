@@ -68,9 +68,10 @@ class GameServiceTest {
     void getNotExistingGameThrowException() throws ParseException {
         Game sample = createGameList().get(0);
         String expectedMessage = String.format("Game ID=%s is not exist!", sample.getId());
-        Executable act = () -> { gameService.getGame(0); };
         Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
         when(mockGameRepo.exists((long) 0)).thenReturn(false);
+
+        Executable act = () -> { gameService.getGame(0); };
 
         assertThrows(expectedException, act, expectedMessage);
     }
@@ -93,9 +94,10 @@ class GameServiceTest {
     void getNotExistingGamePlatformsThrowException() throws ParseException {
         Game sample = createGameList().get(0);
         String expectedMessage = String.format("Game ID=%s is not exist!", sample.getId());
-        Executable act = () -> { gameService.getPlatforms(0); };
         Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
         when(mockGameRepo.exists((long) 0)).thenReturn(false);
+
+        Executable act = () -> { gameService.getPlatforms(0); };
 
         assertThrows(expectedException, act, expectedMessage);
     }
@@ -117,9 +119,10 @@ class GameServiceTest {
     void getNotExistingDeveloperThrowException() throws ParseException {
         Game sample = createGameList().get(0);
         String expectedMessage = String.format("Game ID=%s is not exist!", sample.getId());
-        Executable act = () -> { gameService.getDeveloper(0); };
         Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
         when(mockGameRepo.exists((long) 0)).thenReturn(false);
+
+        Executable act = () -> { gameService.getDeveloper(0); };
 
         assertThrows(expectedException, act, expectedMessage);
     }
@@ -168,9 +171,10 @@ class GameServiceTest {
     void addExistingPlatformToNotExistingGameThrowException() throws ParseException {
         Platform sample = new Platform("expected");
         String expectedMessage = String.format("Game %s not exist!", 0);
-        Executable act = () -> { gameService.addPlatform(sample, 0); };
         Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
         when(mockGameRepo.exists(anyLong())).thenReturn(false);
+
+        Executable act = () -> { gameService.addPlatform(sample, 0); };
 
         assertThrows(expectedException, act, expectedMessage);
     }
@@ -179,10 +183,11 @@ class GameServiceTest {
     void addNotExistingPlatformToExistingGameThrowException() throws ParseException {
         Platform sample = new Platform("expected");
         String expectedMessage = String.format("Game %s not exist!", 0);
-        Executable act = () -> { gameService.addPlatform(sample, 0); };
         Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
         when(mockGameRepo.exists(anyLong())).thenReturn(true);
         when(mockPlatformRepo.existsByName(anyString())).thenReturn(false);
+
+        Executable act = () -> { gameService.addPlatform(sample, 0); };
 
         assertThrows(expectedException, act, expectedMessage);
     }
@@ -194,13 +199,44 @@ class GameServiceTest {
         List<Platform> platforms = game.getPlatforms();
         platforms.add(sample);
         String expectedMessage = String.format("Platform %s exist", sample.getName());
-        Executable act = () -> { gameService.addPlatform(sample, 0); };
         Class<BadRequestException> expectedException = BadRequestException.class;
         when(mockGameRepo.exists(anyLong())).thenReturn(true);
         when(mockPlatformRepo.existsByName(anyString())).thenReturn(true);
         when(mockGameRepo.findById(anyLong())).thenReturn(game);
 
+        Executable act = () -> { gameService.addPlatform(sample, 0); };
+
         assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void editNotExistingGameThrowException() throws ParseException {
+        List<Game> games = createGameList();
+        Game sample = games.get(0);
+        String expectedMessage = String.format("Game %s not exist!", sample.getTitle());
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(false);
+
+        Executable act = () -> { gameService.editGame(sample, 0); };
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void editGameWithProvidedId() throws ParseException {
+        List<Game> games = createGameList();
+        Game sample = games.get(0);
+        Game expected = games.get(1);
+        expected.setPlatforms(sample.getPlatforms());
+        expected.setDeveloper(sample.getDeveloper());
+        Game actual;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockGameRepo.findById(anyLong())).thenReturn(sample);
+
+        actual = gameService.editGame(expected, 0);
+
+        verify(mockGameRepo).save(any(Game.class));
+        assertEquals(expected, actual);
     }
 
     // Helpers
