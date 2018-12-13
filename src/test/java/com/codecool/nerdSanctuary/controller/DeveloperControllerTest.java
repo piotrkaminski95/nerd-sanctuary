@@ -1,6 +1,8 @@
 package com.codecool.nerdSanctuary.controller;
 
 import com.codecool.nerdSanctuary.model.Developer;
+import com.codecool.nerdSanctuary.model.Game;
+import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -17,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -31,6 +34,9 @@ public class DeveloperControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    private DeveloperRepository developerRepository;
 
     @Before
     public void before() throws Exception {
@@ -93,6 +99,20 @@ public class DeveloperControllerTest {
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isCreated());
     }
+
+    @Test
+    public void testDeveloperUpdate() throws Exception {
+        Developer developer = new Developer(20, "name", "country");
+
+        MockHttpServletRequestBuilder builder = put("/developer/10")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(developer));
+
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isOk());
+    }
+
+
 
 
 }
