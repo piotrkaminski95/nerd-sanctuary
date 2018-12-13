@@ -24,7 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -143,6 +143,62 @@ class GameServiceTest {
         Executable act = () -> { gameService.addGame(sample); };
         Class<BadRequestException> expectedException = BadRequestException.class;
         when(mockGameRepo.existsByTitle(sample.getTitle())).thenReturn(true);
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void addPlatformToGameAndReturnIt() throws ParseException {
+        Platform sample = new Platform("expected");
+        Game expected = createGameList().get(0);
+        Game actualGame;
+        List<Platform> expectedPlatforms = new ArrayList<>(expected.getPlatforms());
+        expectedPlatforms.add(sample);
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockPlatformRepo.existsByName(anyString())).thenReturn(true);
+        when(mockGameRepo.findById(anyLong())).thenReturn(expected);
+
+        actualGame = gameService.addPlatform(sample, 0);
+
+        assertEquals(expected, actualGame);
+        assertEquals(expectedPlatforms, actualGame.getPlatforms());
+    }
+
+    @Test
+    void addExistingPlatformToNotExistingGameThrowException() throws ParseException {
+        Platform sample = new Platform("expected");
+        String expectedMessage = String.format("Game %s not exist!", 0);
+        Executable act = () -> { gameService.addPlatform(sample, 0); };
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(false);
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void addNotExistingPlatformToExistingGameThrowException() throws ParseException {
+        Platform sample = new Platform("expected");
+        String expectedMessage = String.format("Game %s not exist!", 0);
+        Executable act = () -> { gameService.addPlatform(sample, 0); };
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockPlatformRepo.existsByName(anyString())).thenReturn(false);
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void addPlatformToGameWhichIsAlreadyAddedThrowException() throws ParseException {
+        Platform sample = new Platform("expected");
+        Game game = createGameList().get(0);
+        List<Platform> platforms = game.getPlatforms();
+        platforms.add(sample);
+        String expectedMessage = String.format("Platform %s exist", sample.getName());
+        Executable act = () -> { gameService.addPlatform(sample, 0); };
+        Class<BadRequestException> expectedException = BadRequestException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockPlatformRepo.existsByName(anyString())).thenReturn(true);
+        when(mockGameRepo.findById(anyLong())).thenReturn(game);
 
         assertThrows(expectedException, act, expectedMessage);
     }
