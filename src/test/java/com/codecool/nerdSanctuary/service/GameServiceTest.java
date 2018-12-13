@@ -59,6 +59,19 @@ class GameServiceTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void getPlatformListOfGameWithGivenId() throws ParseException {
+        Game sample = createGameList().get(0);
+        List<Platform> expected = sample.getPlatforms();
+        List<Platform> actual;
+        when(mockGameRepo.findById(anyLong())).thenReturn(sample);
+        when(mockGameRepo.exists((long) 0)).thenReturn(true);
+
+        actual = gameService.getPlatforms((long) 0);
+
+        assertEquals(expected, actual);
+    }
+
     // Helpers
     private ArrayList<Platform> createPlatformList() {
         ArrayList<Platform> list = new ArrayList<>();

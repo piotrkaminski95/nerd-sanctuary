@@ -34,6 +34,7 @@ public class GameService {
     }
 
     public Game getGame(long id) {
+        logger.info(String.format("CRUD operation: READ GAME ID=%s", id));
         if (!gameRepo.exists(id)) {
             throw new ResourceNotFoundException(String.format("Game ID: %s is not exist!", id));
         }
@@ -41,7 +42,7 @@ public class GameService {
     }
 
     public List<Platform> getPlatforms(long id) {
-        logger.info(String.format("CRUD operation: READ GAME ID=%s", id));
+        logger.info(String.format("CRUD operation: READ GAME ID=%s PLATFORMS", id));
 
         if (!gameRepo.exists(id)) {
             throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
