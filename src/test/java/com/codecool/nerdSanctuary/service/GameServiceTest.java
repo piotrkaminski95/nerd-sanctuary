@@ -1,5 +1,7 @@
 package com.codecool.nerdSanctuary.service;
 
+import com.codecool.nerdSanctuary.exceptions.BadRequestException;
+import com.codecool.nerdSanctuary.exceptions.ResourceNotFoundException;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.model.Genre;
@@ -9,6 +11,7 @@ import com.codecool.nerdSanctuary.repository.GameRepository;
 import com.codecool.nerdSanctuary.repository.PlatformRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +23,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,6 +65,18 @@ class GameServiceTest {
     }
 
     @Test
+    void getNotExistingGameThrowException() throws ParseException {
+        Game sample = createGameList().get(0);
+        String expectedMessage = String.format("Game ID=%s is not exist!", sample.getId());
+        Executable act = () -> { gameService.getGame(0); };
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists((long) 0)).thenReturn(false);
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+
+    @Test
     void getPlatformListOfGameWithGivenId() throws ParseException {
         Game sample = createGameList().get(0);
         List<Platform> expected = sample.getPlatforms();
@@ -71,6 +87,17 @@ class GameServiceTest {
         actual = gameService.getPlatforms((long) 0);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getNotExistingGamePlatformsThrowException() throws ParseException {
+        Game sample = createGameList().get(0);
+        String expectedMessage = String.format("Game ID=%s is not exist!", sample.getId());
+        Executable act = () -> { gameService.getPlatforms(0); };
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists((long) 0)).thenReturn(false);
+
+        assertThrows(expectedException, act, expectedMessage);
     }
 
     @Test
@@ -87,6 +114,17 @@ class GameServiceTest {
     }
 
     @Test
+    void getNotExistingDeveloperThrowException() throws ParseException {
+        Game sample = createGameList().get(0);
+        String expectedMessage = String.format("Game ID=%s is not exist!", sample.getId());
+        Executable act = () -> { gameService.getDeveloper(0); };
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists((long) 0)).thenReturn(false);
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
     void addGameToRepoAndReturnIt() throws ParseException {
         Game expected = createGameList().get(0);
         Game actual;
@@ -96,6 +134,17 @@ class GameServiceTest {
 
         verify(mockGameRepo).save(expected);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void addExistingGameThrowException() throws ParseException {
+        Game sample = createGameList().get(0);
+        String expectedMessage = String.format("Game %s exist!", sample.getTitle());
+        Executable act = () -> { gameService.addGame(sample); };
+        Class<BadRequestException> expectedException = BadRequestException.class;
+        when(mockGameRepo.existsByTitle(sample.getTitle())).thenReturn(true);
+
+        assertThrows(expectedException, act, expectedMessage);
     }
 
     // Helpers

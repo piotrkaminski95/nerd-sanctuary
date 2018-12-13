@@ -54,8 +54,7 @@ public class GameService {
     public Developer getDeveloper(long id) {
         logger.info(String.format("CRUD operation: GET GAME ID=%s DEVELOPER", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("ERROR: ID=%s IS NOT EXIST!", id));
-            return null;
+            throw new ResourceNotFoundException(String.format("ERROR: ID=%s IS NOT EXIST!", id));
         }
         Game game = gameRepo.findById(id);
         return game.getDeveloper();
