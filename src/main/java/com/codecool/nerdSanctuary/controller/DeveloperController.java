@@ -18,8 +18,6 @@ public class DeveloperController {
     @Autowired
     private DeveloperService developerService;
 
-    // i don't know but i have idea to send here some graphical content it will be nicer
-//    @GetMapping("/developer/all")
     @GetMapping("/developer")
     public ResponseEntity<List<Developer>> getAllDevelopers() {
         return new ResponseEntity<>(developerService.getAllDeveloper(), HttpStatus.OK);
