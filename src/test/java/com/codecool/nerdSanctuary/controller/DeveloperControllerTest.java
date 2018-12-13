@@ -1,7 +1,6 @@
 package com.codecool.nerdSanctuary.controller;
 
 import com.codecool.nerdSanctuary.model.Developer;
-import com.codecool.nerdSanctuary.model.Game;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
@@ -17,9 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -124,7 +121,20 @@ public class DeveloperControllerTest {
         resultActions.andExpect(status().isNotFound());
     }
 
+    @Test
+    public void testDeveloperDeleteIsOK() throws Exception {
 
+        MockHttpServletRequestBuilder builder = delete("/developer/9");
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeveloperDeleteIsNotFound() throws Exception {
+        MockHttpServletRequestBuilder builder = delete("/developer/30");
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isNotFound());
+    }
 
 
 }
