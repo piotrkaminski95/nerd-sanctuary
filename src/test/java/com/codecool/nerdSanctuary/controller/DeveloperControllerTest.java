@@ -42,5 +42,19 @@ public class DeveloperControllerTest {
         resultActions.andExpect(status().isOk());
     }
 
+    @Test
+    public void testDeveloperFound() throws Exception {
+        MockHttpServletRequestBuilder builder = get("/developer/9");
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeveloperNotFound() throws Exception {
+        MockHttpServletRequestBuilder builder = get("/developer/50");
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isNotFound());
+    }
+
 
 }
