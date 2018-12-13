@@ -101,7 +101,7 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDeveloperUpdate() throws Exception {
+    public void testDeveloperUpdateIsOK() throws Exception {
         Developer developer = new Developer(20, "name", "country");
 
         MockHttpServletRequestBuilder builder = put("/developer/10")
@@ -110,6 +110,18 @@ public class DeveloperControllerTest {
 
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeveloperUpdateFail() throws Exception {
+        Developer developer = new Developer(20, "name", "country");
+
+        MockHttpServletRequestBuilder builder = put("/developer/30")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(developer));
+
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isNotFound());
     }
 
 
