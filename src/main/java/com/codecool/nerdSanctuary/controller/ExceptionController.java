@@ -26,7 +26,6 @@ public class ExceptionController {
         if (response.getStatus() == 500) {
             sendEmail(exception, message);
         }
-        sendEmail(exception, message);
         return exception;
     }
 
