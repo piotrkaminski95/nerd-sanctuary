@@ -325,6 +325,30 @@ class GameServiceTest {
         assertEquals(expected, actual.getDeveloper());
     }
 
+    @Test
+    void deleteGameFromRepoAndReturnIt() throws ParseException {
+        Game expected = createGameList().get(0);
+        Game actual;
+        when(mockGameRepo.findById(anyLong())).thenReturn(expected);
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+
+        actual = gameService.deleteGame(0);
+
+        verify(mockGameRepo).delete(expected);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void deleteNotExistingGameThrowException() throws ParseException {
+        Game sample = createGameList().get(0);
+        String expectedMessage = String.format("Game ID=%s is no exist!", 0);
+        Executable act = () -> { gameService.deleteGame(0); };
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(false);
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
 
     // Helpers
     private ArrayList<Platform> createPlatformList() {

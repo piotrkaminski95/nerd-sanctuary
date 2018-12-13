@@ -134,7 +134,7 @@ public class GameService {
     public Game deleteGame(long id) {
         logger.info(String.format("CRUD operation: DELETE GAME ID=%s", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("Game ID=%s is no exist!", id));
+            throw new ResourceNotFoundException(String.format("Game ID=%s is no exist!", id));
         }
 
         Game game = gameRepo.findById(id);
