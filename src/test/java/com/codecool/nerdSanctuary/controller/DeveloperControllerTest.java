@@ -89,12 +89,22 @@ public class DeveloperControllerTest {
 
     @Test
     public void testDeveloperCreated() throws Exception {
-        Developer developer = new Developer(20, "name", "country");
+        Developer developer = new Developer(50, "nameee", "country");
         MockHttpServletRequestBuilder builder = post("/developer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(developer));
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testDeveloperNotCreated() throws Exception {
+        Developer developer = new Developer(11, "From Software", "country");
+        MockHttpServletRequestBuilder builder = post("/developer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(developer));
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isNotFound());
     }
 
     @Test
@@ -135,6 +145,7 @@ public class DeveloperControllerTest {
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isNotFound());
     }
+
 
 
 }
