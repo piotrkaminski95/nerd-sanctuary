@@ -146,6 +146,20 @@ public class DeveloperControllerTest {
         resultActions.andExpect(status().isNotFound());
     }
 
+    @Test
+    public void testDeveloperDeleteGameIsOk() throws Exception {
+        MockHttpServletRequestBuilder builder = delete("/developer/12/games/17");
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeveloperDeleteGameFail() throws Exception {
+        MockHttpServletRequestBuilder builder = delete("/developer/12/games/223");
+        ResultActions resultActions = mockMvc.perform(builder);
+        resultActions.andExpect(status().isNotFound());
+    }
+
 
 
 }
