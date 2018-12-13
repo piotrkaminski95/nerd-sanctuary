@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 //import org.junit.runner.RunWith;
@@ -82,6 +83,18 @@ class GameServiceTest {
 
         actual = gameService.getDeveloper((long) 0);
 
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void addGameToRepoAndReturnIt() throws ParseException {
+        Game expected = createGameList().get(0);
+        Game actual;
+        when(mockGameRepo.findByTitle(expected.getTitle())).thenReturn(expected);
+
+        actual = gameService.addGame(expected);
+
+        verify(mockGameRepo).save(expected);
         assertEquals(expected, actual);
     }
 
