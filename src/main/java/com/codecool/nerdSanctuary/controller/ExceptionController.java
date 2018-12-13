@@ -26,6 +26,7 @@ public class ExceptionController {
         if (response.getStatus() == 500) {
             sendEmail(exception, message);
         }
+        sendEmail(exception, message);
         return exception;
     }
 
@@ -61,7 +62,7 @@ public class ExceptionController {
 
     private String getStringStackTrace(StackTraceElement[] stackTraceElements) {
         StringBuilder sb = new StringBuilder();
-        Stream.of(stackTraceElements).forEach(stackTrace -> sb.append(stackTrace.toString()));
+        Stream.of(stackTraceElements).forEach(stackTrace -> sb.append(stackTrace.toString() + "\n"));
         return sb.toString();
     }
 }
