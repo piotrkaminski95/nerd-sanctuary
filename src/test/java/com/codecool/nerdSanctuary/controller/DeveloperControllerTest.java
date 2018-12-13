@@ -1,11 +1,14 @@
 package com.codecool.nerdSanctuary.controller;
 
+import com.codecool.nerdSanctuary.model.Developer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -13,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -25,8 +29,11 @@ public class DeveloperControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Before
-    public void before() throws Exception{
+    public void before() throws Exception {
         mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
@@ -57,31 +64,34 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDevelopersGamesFound() throws Exception{
+    public void testDevelopersGamesFound() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/9/games");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDevelopersGamesNotFound() throws Exception{
+    public void testDevelopersGamesNotFound() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/50/games");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isNotFound());
     }
 
     @Test
-    public void testDeveloperGameFound() throws Exception{
+    public void testDeveloperGameFound() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/9/games/14");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDeveloperGameNotFound() throws Exception{
-        MockHttpServletRequestBuilder builder = get("/developer/9/games/1");
+    public void testDeveloperCreated() throws Exception {
+        Developer developer = new Developer(20, "name", "country");
+        MockHttpServletRequestBuilder builder = post("/developer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(developer));
         ResultActions resultActions = mockMvc.perform(builder);
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isCreated());
     }
 
 
