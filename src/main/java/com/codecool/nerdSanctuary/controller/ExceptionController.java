@@ -40,5 +40,28 @@ public class ExceptionController {
     }
 
 
+    //    TEST EMAIL= testsendmail.nerdsanctuary@gmail.com password= test-mail
+    public void sendEmail(RuntimeException exception, String message) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
+        simpleMailMessage.setFrom("testsendmail.nerdsanctuary@gmail.com");
+        simpleMailMessage.setTo("testsendmail.nerdsanctuary@gmail.com");
+        simpleMailMessage.setSubject("Server Error Occurs!");
+        simpleMailMessage.setText(
+                String.format(
+                        "%s%nStack Trace: %n %s",
+                        message,
+                        getStringStackTrace(exception.getStackTrace())
+                )
+        );
+
+        javaMailSender.send(simpleMailMessage);
+    }
+
+
+    private String getStringStackTrace(StackTraceElement[] stackTraceElements) {
+        StringBuilder sb = new StringBuilder();
+        Stream.of(stackTraceElements).forEach(stackTrace -> sb.append(stackTrace.toString()));
+        return sb.toString();
+    }
 }
