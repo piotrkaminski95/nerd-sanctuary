@@ -281,6 +281,50 @@ class GameServiceTest {
         assertEquals(expected, actual.getPlatforms());
     }
 
+    @Test
+    void editNotExistingGameDeveloperThrowException() throws ParseException {
+        String expectedMessage = String.format("Game %s not exist!", 0);
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(false);
+
+        Executable act = () -> { gameService.editDeveloper(mock(Developer.class), 0); };
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void editGameWithNotExistingDeveloperThrowException() throws ParseException {
+        Developer developer = new Developer();
+        developer.setName("expected");
+        String expectedMessage = String.format("Developer %s is not exist!", developer.getName());
+        Class<ResourceNotFoundException> expectedException = ResourceNotFoundException.class;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockDevRepo.existsByName(anyString())).thenReturn(false);
+
+        Executable act = () -> { gameService.editDeveloper(developer, 0); };
+
+        assertThrows(expectedException, act, expectedMessage);
+    }
+
+    @Test
+    void editGameDeveloperWithProvidedId() throws ParseException {
+        List<Game> games = createGameList();
+        Game sample = games.get(0);
+        Developer expected = new Developer();
+        expected.setName("expected");
+        Game actual;
+        when(mockGameRepo.exists(anyLong())).thenReturn(true);
+        when(mockDevRepo.existsByName(anyString())).thenReturn(true);
+        when(mockGameRepo.findById(anyLong())).thenReturn(sample);
+        when(mockDevRepo.findByName(anyString())).thenReturn(expected);
+
+
+        actual = gameService.editDeveloper(expected, 0);
+
+        verify(mockGameRepo).save(any(Game.class));
+        assertEquals(expected, actual.getDeveloper());
+    }
+
 
     // Helpers
     private ArrayList<Platform> createPlatformList() {

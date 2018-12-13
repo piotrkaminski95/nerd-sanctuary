@@ -122,7 +122,7 @@ public class GameService {
         }
 
         if (!devRepo.existsByName(developer.getName())) {
-            logger.info(String.format("Developer %s is not exist!", developer.getName()));
+            throw new ResourceNotFoundException(String.format("Developer %s is not exist!", developer.getName()));
         }
 
         Game game = gameRepo.findById(id);
