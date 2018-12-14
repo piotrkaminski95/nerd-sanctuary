@@ -1,5 +1,6 @@
 package com.codecool.nerdSanctuary.model;
 
+import com.codecool.nerdSanctuary.exceptions.ResourceNotFoundException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.ResultCheckStyle;
@@ -124,7 +125,7 @@ public class Developer {
         if (toCheck.isPresent()) {
             return toCheck.get();
         }
-        throw new IllegalArgumentException("Game not found!");
+        throw new ResourceNotFoundException("Game not found");
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.codecool.nerdSanctuary.service;
 import com.codecool.nerdSanctuary.exceptions.ResourceNotFoundException;
 import com.codecool.nerdSanctuary.model.Developer;
 import com.codecool.nerdSanctuary.model.Game;
+import com.codecool.nerdSanctuary.model.State;
 import com.codecool.nerdSanctuary.repository.DeveloperRepository;
 import com.codecool.nerdSanctuary.repository.GameRepository;
 import org.apache.logging.log4j.LogManager;
@@ -76,12 +77,15 @@ public class DeveloperService {
     public List<Developer> deleteDeveloper(long id) {
         logger.info(String.format("CRUD operation: DELETE Developer ID=%s", id));
         Developer developer = developerRepository.findOne(id);
-        developer.getGames().forEach(game -> {
-            game.setDeveloper(null);
-            gameRepository.save(game);
-        });
-        developerRepository.delete(id);
-        return developerRepository.findAll();
+        if(developer != null) {
+            developer.getGames().forEach(game -> {
+                game.setDeveloper(null);
+                gameRepository.save(game);
+            });
+            developerRepository.delete(id);
+            return developerRepository.findAll();
+        }
+        throw new ResourceNotFoundException(String.format("Developer=%s doesn't not exist in database!", id));
     }
 
     public List<Game> deleteDeveloperGame(long devId, long gameId) {
