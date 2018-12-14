@@ -134,7 +134,7 @@ public class DeveloperControllerTest {
     @Test
     public void testDeleteDeveloperByIDWhenExistExpectedStatusOK() throws Exception {
 
-        MockHttpServletRequestBuilder builder = delete("/developer/9");
+        MockHttpServletRequestBuilder builder = delete("/developer/13");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
