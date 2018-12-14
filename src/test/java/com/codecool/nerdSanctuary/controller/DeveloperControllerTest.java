@@ -46,49 +46,49 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDevelopersFound() throws Exception {
+    public void testGetDevelopersExpectedStatusIsOK() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDeveloperFound() throws Exception {
+    public void testGetDeveloperByIdWhenDeveloperExistExpectedStatusOK() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/9");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDeveloperNotFound() throws Exception {
+    public void testGetDeveloperByIdWhenDeveloperNotExistExpectedStatusNotFound() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/50");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isNotFound());
     }
 
     @Test
-    public void testDevelopersGamesFound() throws Exception {
+    public void testGetDeveloperGamesWhenDeveloperExistExpectedStatusOK() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/9/games");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDevelopersGamesNotFound() throws Exception {
+    public void testGetDeveloperGamesWhenDeveloperNotExistExpectedStatusNotFound() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/50/games");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isNotFound());
     }
 
     @Test
-    public void testDeveloperGameFound() throws Exception {
+    public void testGetDeveloperGameByIdWhenGameExistExpectedStatusOk() throws Exception {
         MockHttpServletRequestBuilder builder = get("/developer/9/games/14");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDeveloperCreated() throws Exception {
+    public void testAddDeveloperWhenIsNotInBaseExpectedStatusCreated() throws Exception {
         Developer developer = new Developer(50, "nameee", "country");
         MockHttpServletRequestBuilder builder = post("/developer")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +98,7 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDeveloperNotCreated() throws Exception {
+    public void testAddDeveloperWhenIsInBaseExpectedStatusNotFound() throws Exception {
         Developer developer = new Developer(11, "From Software", "country");
         MockHttpServletRequestBuilder builder = post("/developer")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +108,7 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDeveloperUpdateIsOK() throws Exception {
+    public void testUpdateDeveloperByIDWhenExistExpectedStatusOK() throws Exception {
         Developer developer = new Developer(20, "name", "country");
 
         MockHttpServletRequestBuilder builder = put("/developer/10")
@@ -120,7 +120,7 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDeveloperUpdateFail() throws Exception {
+    public void testUpdateDeveloperByIDWhenNotExistExpectedStatusNotFound() throws Exception {
         Developer developer = new Developer(20, "name", "country");
 
         MockHttpServletRequestBuilder builder = put("/developer/30")
@@ -132,7 +132,7 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDeveloperDeleteIsOK() throws Exception {
+    public void testDeleteDeveloperByIDWhenExistExpectedStatusOK() throws Exception {
 
         MockHttpServletRequestBuilder builder = delete("/developer/9");
         ResultActions resultActions = mockMvc.perform(builder);
@@ -140,21 +140,21 @@ public class DeveloperControllerTest {
     }
 
     @Test
-    public void testDeveloperDeleteIsNotFound() throws Exception {
+    public void testDeleteDeveloperByIdWhenNotExistExpectedStatusNotFound() throws Exception {
         MockHttpServletRequestBuilder builder = delete("/developer/30");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isNotFound());
     }
 
     @Test
-    public void testDeveloperDeleteGameIsOk() throws Exception {
+    public void testDeleteDeveloperGameByIdWhenGameExistExpectedStatusOK() throws Exception {
         MockHttpServletRequestBuilder builder = delete("/developer/12/games/17");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    public void testDeveloperDeleteGameFail() throws Exception {
+    public void testDeleteDeveloperGameByIdWhenGameNotExistExpectedStatusNotFound() throws Exception {
         MockHttpServletRequestBuilder builder = delete("/developer/12/games/223");
         ResultActions resultActions = mockMvc.perform(builder);
         resultActions.andExpect(status().isNotFound());
