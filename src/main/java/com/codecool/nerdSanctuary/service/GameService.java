@@ -34,6 +34,7 @@ public class GameService {
     }
 
     public Game getGame(long id) {
+        logger.info(String.format("CRUD operation: READ GAME ID=%s", id));
         if (!gameRepo.exists(id)) {
             throw new ResourceNotFoundException(String.format("Game ID: %s is not exist!", id));
         }
@@ -41,7 +42,7 @@ public class GameService {
     }
 
     public List<Platform> getPlatforms(long id) {
-        logger.info(String.format("CRUD operation: READ GAME ID=%s", id));
+        logger.info(String.format("CRUD operation: READ GAME ID=%s PLATFORMS", id));
 
         if (!gameRepo.exists(id)) {
             throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
@@ -53,7 +54,7 @@ public class GameService {
     public Developer getDeveloper(long id) {
         logger.info(String.format("CRUD operation: GET GAME ID=%s DEVELOPER", id));
         if (!gameRepo.exists(id)) {
-            throw new ResourceNotFoundException(String.format("Game ID=%s is not exist!", id));
+            throw new ResourceNotFoundException(String.format("ERROR: ID=%s IS NOT EXIST!", id));
         }
         Game game = gameRepo.findById(id);
         return game.getDeveloper();
@@ -121,7 +122,7 @@ public class GameService {
         }
 
         if (!devRepo.existsByName(developer.getName())) {
-            logger.info(String.format("Developer %s is not exist!", developer.getName()));
+            throw new ResourceNotFoundException(String.format("Developer %s is not exist!", developer.getName()));
         }
 
         Game game = gameRepo.findById(id);
@@ -133,7 +134,7 @@ public class GameService {
     public Game deleteGame(long id) {
         logger.info(String.format("CRUD operation: DELETE GAME ID=%s", id));
         if (!gameRepo.exists(id)) {
-            logger.info(String.format("Game ID=%s is no exist!", id));
+            throw new ResourceNotFoundException(String.format("Game ID=%s is no exist!", id));
         }
 
         Game game = gameRepo.findById(id);
