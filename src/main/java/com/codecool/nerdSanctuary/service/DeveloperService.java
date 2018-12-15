@@ -21,7 +21,7 @@ public class DeveloperService {
 
     @Autowired
     private GameRepository gameRepository;
-
+    //TODO Template Method or Interceptor design pattern
     private Logger logger = LogManager.getLogger();
 
     public List<Developer> getAllDeveloper() {

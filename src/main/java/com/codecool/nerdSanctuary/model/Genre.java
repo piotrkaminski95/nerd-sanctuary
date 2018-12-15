@@ -1,5 +1,5 @@
 package com.codecool.nerdSanctuary.model;
-
+//TODO better class not enum
 public enum Genre {
     ACTION,
     RPG,
